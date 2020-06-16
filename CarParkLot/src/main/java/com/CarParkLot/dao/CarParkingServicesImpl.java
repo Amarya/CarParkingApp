@@ -30,11 +30,12 @@ public class CarParkingServicesImpl implements CarParkingServices {
 			return parkingSlotList;
 		}
 		/********************Park car inside Parking with Slot*************************/
-		public String parkCar(Car car, ParkingSlot slot) {
+		public String parkCar(Car car, ParkingSlot slot,int time) {
 			// TODO Auto-generated method stub
 			Car_ParkingSlot parkingSlot=new Car_ParkingSlot();
 			parkingSlot.setCar(car);
 			parkingSlot.setSlot(slot);
+			parkingSlot.setParkTime(time);
 			car_parkingSlotList.add(parkingSlot);
 			return car.getCar_no()+" Car Park In Slot "+slot.getParkingSlot_no();
 		}
@@ -98,5 +99,26 @@ public class CarParkingServicesImpl implements CarParkingServices {
 			// TODO: handle exception
 			System.out.println(e);
 		}
+	}
+	/**************unPark Car Detail********************/
+	public Car_ParkingSlot unParkCarDetail(String car_no) {
+		// TODO Auto-generated method stub
+		 int c=0;
+		try{
+		 
+		 for(Car_ParkingSlot car_ParkingSlot:car_parkingSlotList)
+		 {
+			 
+			 if(car_ParkingSlot.getCar().getCar_no().equals(car_no))
+			 {
+				 break;
+			 }
+			 c++;
+		 }
+		}catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e);
+		}
+		return car_parkingSlotList.get(c);
 	}
 }

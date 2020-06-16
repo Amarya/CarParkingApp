@@ -18,6 +18,8 @@ public class CarParkManager {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
+		
+		
 		adminMenu();
          
 	}
@@ -55,6 +57,7 @@ public class CarParkManager {
 						 System.out.println("Sorry Parking Full Plz Wait");
 					 else
 					 System.out.println("Available Slots");
+					 int time=java.time.LocalTime.now().getHour();
 					 for(Integer i:availableSlots)
 					 {
 						 System.out.println(i);
@@ -72,7 +75,7 @@ public class CarParkManager {
 					  
 					  ParkingSlot slot=new ParkingSlot();
 					  slot.setParkingSlot_no(entrySlotNo);
-					  String status=servicesImpl.parkCar(car, slot);
+					  String status=servicesImpl.parkCar(car, slot,time);
 					  System.out.println(status);
 					}catch (Exception e) {
 						// TODO: handle exception
@@ -87,15 +90,49 @@ public class CarParkManager {
 						 System.out.println("SLOT:"+parkingSlot.getParkingSlot_no());
 					    System.out.println("---Parking Status---");
 					    List<Car_ParkingSlot>car_slotLsat=servicesImpl.getParkingStatus();
-					    System.out.println("CAR NO"+"\t"+"SLOT NO");
+					    System.out.println("CAR NO"+"\t"+"SLOT NO"+"\t"+"Park Time");
 					    for(Car_ParkingSlot parkingSlot:car_slotLsat)
-					    System.out.println(parkingSlot.getCar().getCar_no()+"\t"+parkingSlot.getSlot().getParkingSlot_no());
-					break;
+					    System.out.println(parkingSlot.getCar().getCar_no()+"\t"+parkingSlot.getSlot().getParkingSlot_no()+"\t"+parkingSlot.getParkTime());
+					    System.out.println("Available Slots");
+					    Set<Integer>availableSlots=servicesImpl.getAvailableSlots();
+						 if(availableSlots.isEmpty())
+							 System.out.println("Sorry Parking Full Plz Wait");
+						 else
+						 for(Integer i:availableSlots)
+						 {
+							 System.out.println(i);
+						 }
+					    break;
 				case 4:
+					 try{
 					 System.out.println("---UnPark Car---");
 					 System.out.println("Enter car Number to UnPark");
 					 car_no=sc.next();
+					 Car_ParkingSlot car_ParkingSlot=servicesImpl.unParkCarDetail(car_no);
+					 if(car_ParkingSlot==null)
+					 {
+						 System.out.println("Car Not Avilable");
+					 }
+					 else
+					 {
+					 System.out.println("--Car Detail--");
+					 System.out.println("CAR NO:"+car_ParkingSlot.getCar().getCar_no());
+					 System.out.println("CAR COLOR:"+car_ParkingSlot.getCar().getCar_color());
+					 System.out.println("SLOT NO:"+car_ParkingSlot.getSlot().getParkingSlot_no());
+					 System.out.println("PARKING TIME:"+car_ParkingSlot.getParkTime());
+					 int cHrs=java.time.LocalTime.now().getHour();
+					 int pHrs=car_ParkingSlot.getParkTime();
+					 if(cHrs==pHrs)
+						 System.out.println("PARKING CHARGES:"+10+"$");
+					 else
+						 System.out.println("PARKING CHARGES:"+((cHrs-pHrs)*10)+"$");
 					 servicesImpl.unParkCar(car_no);
+					    System.out.println("CAR NO "+car_ParkingSlot.getCar().getCar_no()+" Unpark");
+					 }
+					 }catch (Exception e) {
+							// TODO: handle exception
+						 //System.out.println(e);
+						}
 					break;
 				case 0:
 					 System.out.println("---Exit---");
